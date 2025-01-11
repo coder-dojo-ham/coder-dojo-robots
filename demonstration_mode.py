@@ -26,7 +26,7 @@ def larson_leds():
         
 while True:
     if button_a.value() == 1:
-        import follow_line
+        import line_following.follow_line as follow_line
     elif button_b.value() == 1:
-        import wall_avoid_proportional
+        import object_avoiding.wall_avoid_proportional as wall_avoid_proportional
     time.sleep(0.01)

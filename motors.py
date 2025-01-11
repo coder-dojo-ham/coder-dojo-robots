@@ -1,22 +1,26 @@
 from machine import Pin, PWM
-PWM_MAX = 65025
 
+MAX_SPEED = 2 ** 16 - 1
 
-class Motor:
-    def __init__(self, pin1, pin2):
-        self.pin1 = Pin(pin1, Pin.OUT)
-        self.pin2 = Pin(pin2, Pin.OUT)
-        self.m1 = PWM(self.pin1)
-        self.m2 = PWM(self.pin2)
-        
-    def stop(self):
-        self.m2.duty_u16(0)
-        self.m1.duty_u16(0)
-    
-    def drive(self, speed):
-        if speed > 0:
-            self.m1.duty_u16(int(PWM_MAX * speed))
-            self.m2.duty_u16(0)
-        if speed < 0:
-            self.m2.duty_u16(int(PWM_MAX * -speed))
-            self.m1.duty_u16(0)
+motor_l_forward = PWM(Pin(8), freq=2000)
+motor_l_back = PWM(Pin(9), freq=2000)
+motor_r_forward = PWM(Pin(11), freq=2000)
+motor_r_back = PWM(Pin(10), freq=2000)
+
+left = motor_l_forward, motor_l_back
+right = motor_r_forward, motor_r_back
+
+def stop(motor):
+    motor[0].duty_u16(0)
+    motor[1].duty_u16(0)
+
+def set_speed(motor, speed):
+    if speed < 0:
+        motor = motor[1], motor[0]
+        speed = -speed
+    motor[0].duty_u16(int(speed * MAX_SPEED))
+    motor[1].duty_u16(0)
+
+def stop_all():
+    stop(left)
+    stop(right)
