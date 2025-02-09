@@ -1,6 +1,6 @@
 # motor test
 from machine import Pin, PWM
-import time 
+import time
 
 motor_l_forward = PWM(Pin(8), freq=2000)
 motor_l_back = PWM(Pin(9), freq=2000)

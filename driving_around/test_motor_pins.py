@@ -1,6 +1,5 @@
-# motor test
-from machine import Pin, PWM
-import time 
+from machine import Pin
+import time
 
 motor_l_forward = Pin(8, Pin.OUT)
 motor_l_back = Pin(9, Pin.OUT)

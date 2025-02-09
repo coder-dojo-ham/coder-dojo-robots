@@ -2,7 +2,7 @@ from machine import Pin
 from neopixel import NeoPixel
 import time
 
-leds = NeoPixel(Pin(18, Pin.OUT),2)
+leds = NeoPixel(Pin(18, Pin.OUT), 2)
 leds[0] = (255, 0, 255)
 leds[1] = (0, 255, 0)
 leds.write()

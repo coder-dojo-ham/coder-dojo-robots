@@ -1,5 +1,6 @@
 import time
 from machine import Pin, PWM
+
 PWM_MAX = 65025
 
 # using 2 pwm pins is simpler - due to the negative PWM gap.
