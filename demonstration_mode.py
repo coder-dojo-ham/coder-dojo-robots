@@ -1,32 +1,34 @@
 # Start up - show lights running.
-# When A is pressed - line follow until reset
-# When B is pressed - distance avoid until reset
+# When 20 is pressed - line follow until reset
+# When 21 is pressed - distance avoid until reset
 # Must upload:
-# motors.py, rcwl_1601.py, follow_line.py, wall_avoid_proportional.py and this file.
+# motors.py, rcwl_1601.py, follow_line.py,
+# wall_avoid_proportional.py and this file.
 # Rename this file to main.py.
 from machine import Pin
+from larson_scanner import larson_leds
+import p_line_follower, wall_avoid_proportional
 import time
 
-button_a = Pin(20)
-button_b = Pin(21)
+button_20 = Pin(20, mode=Pin.IN, pull=Pin.PULL_UP)
+button_21 = Pin(21, mode=Pin.IN, pull=Pin.PULL_UP)
+larson = larson_leds()
 
-def larson_leds():
-    current_direction = 1
-    current_position = 0
-    position_led_range = list(range(0, 8)) + [16, 17, 26, 27, 28]
-    position_leds = [Pin(l, Pin.OUT) for l in position_led_range]
-    highest_position = len(position_leds) - 1
-    while True:
-        if not 0 < current_position < highest_position:
-            current_direction = -current_direction
-        position_leds[current_position].value(0)
-        current_position += current_direction        
-        position_leds[current_position].value(1)
-        yield
-        
+
+def debounce_in(button_pin):
+    # Low is pushed
+    if button_pin.value == 0:
+        cur_value = 0
+        active = 0
+        while active < 20:
+            if pin.value() != cur_value:
+                active +=1
+            
+    
 while True:
-    if button_a.value() == 1:
-        import line_following.follow_line as follow_line
-    elif button_b.value() == 1:
-        import object_avoiding.wall_avoid_proportional as wall_avoid_proportional
-    time.sleep(0.01)
+    next(larson)
+    if button_20.value() == 0:
+        p_line_follower.run()        
+    elif button_21.value() == 0:
+        wall_avoid_proportional.run()
+    time.sleep(0.05)
